@@ -602,7 +602,8 @@ while True:
                 data['MFI_Roll_Min'] = data['MFI'].rolling(window=window).min()
                 data['MFI_Bear_Div'] = (data['Close'] == data['Close_Roll_Max']) & (data['MFI'] < data['MFI_Roll_Max'].shift(1))
                 data['MFI_Bull_Div'] = (data['Close'] == data['Close_Roll_Min']) & (data['MFI'] > data['MFI_Roll_Min'].shift(1))
-                
+                data['High_Max'] = data['High'].rolling(window=window).max()
+                data['Low_Min'] = data['Low'].rolling(window=window).min()
                 # 新增：OBV突破（预计算，20期滚动新高/新低）
                 data['OBV_Roll_Max'] = data['OBV'].rolling(window=20).max()
                 data['OBV_Roll_Min'] = data['OBV'].rolling(window=20).min()
@@ -782,6 +783,11 @@ while True:
                         row["Volume"] > data["前5均量"].iloc[index] and 
                         row["RSI"] > 50):
                         signals.append("📉 黃昏之星")
+
+                    if index > 0 and row["High"] > data['High_Roll_Max'].iloc[index-1]:
+                        signals.append("📈 突破5K")
+                    if index > 0 and row["Low"] < data['Low_Roll_Min'].iloc[index-1]:
+                        signals.append("📉 跌穿5K")
                     # 新增：烏雲蓋頂
                     if (index > 0 and 
                         data["Close"].iloc[index-1] > data["Open"].iloc[index-1] and  # 前一日陽線
