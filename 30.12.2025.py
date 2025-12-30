@@ -784,9 +784,9 @@ while True:
                         row["RSI"] > 50):
                         signals.append("📉 黃昏之星")
 
-                    if index > 0 and row["High"] > data['High_Roll_Max'].iloc[index-1]:
+                    if index > 0 and row["High"] > data['High_Max'].iloc[index-1]:
                         signals.append("📈 BreakOut_5K")
-                    if index > 0 and row["Low"] < data['Low_Roll_Min'].iloc[index-1]:
+                    if index > 0 and row["Low"] < data['Low_Min'].iloc[index-1]:
                         signals.append("📉 BreakDown_5K")
                     # 新增：烏雲蓋頂
                     if (index > 0 and 
