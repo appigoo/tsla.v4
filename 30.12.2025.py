@@ -64,7 +64,8 @@ def calculate_macd(data, fast=12, slow=26, signal=9):
     exp2 = data["Close"].ewm(span=slow, adjust=False).mean()
     macd = exp1 - exp2
     signal_line = macd.ewm(span=signal, adjust=False).mean()
-    return macd, signal_line
+    histogram = macd - signal_line
+    return macd, signal_line, histogram
 
 # RSI 计算函数
 def calculate_rsi(data, periods=14):
@@ -566,7 +567,7 @@ while True:
                 data["📈 股價漲跌幅 (%)"] = ((abs(data["Price Change %"]) - data["前5均價ABS"]) / data["前5均價ABS"]).round(4) * 100
                 data["📊 成交量變動幅 (%)"] = ((data["Volume"] - data["前5均量"]) / data["前5均量"]).round(4) * 100
 
-                data["MACD"], data["Signal"] = calculate_macd(data)
+                data["MACD"], data["Signal"], data["Histogram"] = calculate_macd(data)
                 data["EMA5"] = data["Close"].ewm(span=5, adjust=False).mean()
                 data["EMA10"] = data["Close"].ewm(span=10, adjust=False).mean()
                 data["EMA30"] = data["Close"].ewm(span=30, adjust=False).mean()
